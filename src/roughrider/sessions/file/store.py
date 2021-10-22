@@ -2,12 +2,12 @@ import time
 import typing as t
 from pathlib import Path
 from datetime import datetime
-from roughrider.session import Store
+from roughrider.session import Store, Session
 from cromlech.marshallers import Marshaller, PickleMarshaller
 
 
 class FileStore(Store):
-    """ Files based HTTP session.
+    """File-based HTTP sessions store.
     """
     def __init__(self,
                  root: Path,
@@ -18,18 +18,18 @@ class FileStore(Store):
         self.delta = delta  # timedelta in seconds.
         self.marshaller = marshaller
 
-    def get_session_path(self, sid):
+    def get_session_path(self, sid) -> Path:
         """Override to add a prefix or a namespace, if needed.
         """
         return self.root / sid
 
-    def __iter__(self):
+    def __iter__(self) -> t.Iterable[Path]:
         """Override to add a prefix or a namespace, if needed.
         """
         for child in self.root.iterdir():
             yield child
 
-    def get_session_file(self, sid, epoch: int = None):
+    def get_session_file(self, sid, epoch: int = None) -> t.Optional[Path]:
         """Override to customize the behavior, add events or other
         kind of decorum.
         """
@@ -44,15 +44,14 @@ class FileStore(Store):
             return path
         return None
 
-    def get(self, sid):
+    def get(self, sid: str) -> Session:
         session_path = self.get_session_file(sid)
         if session_path is None:
             return self.new()
         session = self.marshaller.load_from(session_path)
         return session
 
-    def set(self, sid: str, data: dict) -> t.NoReturn:
-        assert isinstance(data, dict)
+    def set(self, sid: str, data: t.Mapping) -> t.NoReturn:
         session_path = self.get_session_path(sid)  # it might not exist
         self.marshaller.dump_to(data, session_path)
 
@@ -67,7 +66,7 @@ class FileStore(Store):
 
     delete = clear
 
-    def flush_expired_sessions(self):
+    def flush_expired_sessions(self) -> t.NoReturn:
         """This method should be used in an asynchroneous task.
         Running this during an HTTP request/response cycle, synchroneously
         can result in low performances.
