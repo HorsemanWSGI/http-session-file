@@ -1,2 +1,2 @@
 cromlech.marshallers == 0.1
-git+https://github.com/HorsemanWSGI/roughrider.session.git@master#egg=roughrider.session
+git+https://github.com/HorsemanWSGI/roughrider.session.git@main#egg=roughrider.session

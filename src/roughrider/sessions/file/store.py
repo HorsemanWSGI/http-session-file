@@ -1,7 +1,8 @@
 import time
+import typing as t
 from pathlib import Path
 from datetime import datetime
-from cromlech.session import Store
+from roughrider.session import Store
 from cromlech.marshallers import Marshaller, PickleMarshaller
 
 
@@ -11,8 +12,9 @@ class FileStore(Store):
     def __init__(self,
                  root: Path,
                  delta: int,
-                 marshaller: Type[Marshaller] = PickleMarshaller):
+                 marshaller: t.Type[Marshaller] = PickleMarshaller):
         root.mkdir(parents=True, exist_ok=False)
+        self.root = root
         self.delta = delta  # timedelta in seconds.
         self.marshaller = marshaller
 
@@ -49,17 +51,17 @@ class FileStore(Store):
         session = self.marshaller.load_from(session_path)
         return session
 
-    def set(self, sid: str, data: dict):
+    def set(self, sid: str, data: dict) -> t.NoReturn:
         assert isinstance(data, dict)
         session_path = self.get_session_path(sid)  # it might not exist
         self.marshaller.dump_to(data, session_path)
 
-    def touch(self, sid: str):
-        session_path = self.get_session_path(sid)
+    def touch(self, sid: str) -> t.NoReturn:
+        session_path = self.get_session_file(sid)
         if session_path is not None:
             session_path.touch()
 
-    def clear(self, sid: str):
+    def clear(self, sid: str) -> t.NoReturn:
         session = self.get_session_path(sid)
         session.unlink()
 
