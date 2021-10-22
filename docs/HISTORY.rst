@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1 (2020-11-27)
+0.1 (unreleased)
 ----------------
 
-- First release
+- Fork-evolution of `cromlech.sessions.file`

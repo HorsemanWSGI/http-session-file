@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 version = '0.1'
 
 install_requires = [
-    'roughrider.session',
+    'http_session',
     'cromlech.marshallers',
 ]
 
@@ -15,23 +15,29 @@ tests_require = [
 ]
 
 setup(
-    name='roughrider.sessions.file',
+    name='http_session_file',
     version=version,
-    description="Session handling for wsgi applications using files",
+    description="Session handling using files as storage",
     long_description=(
         open("README.rst").read() + "\n" +
-        open(os.path.join("docs", "HISTORY.rst")).read()),
+        open(os.path.join("docs", "HISTORY.rst")).read()
+    ),
     classifiers=[
+        'License :: OSI Approved :: BSD License',
         "Programming Language :: Python",
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     keywords='file, session, HTTP',
     author='Souheil Chelfouh',
     author_email='trollfot@gmail.com',
     url='',
-    license='ZPL',
+    license_files=(
+        'docs/LICENSE.txt',
+    ),
     packages=find_packages('src', exclude=['ez_setup']),
     package_dir={'': 'src'},
-    namespace_packages=['roughrider', 'roughrider.sessions'],
     include_package_data=True,
     zip_safe=False,
     tests_require=tests_require,

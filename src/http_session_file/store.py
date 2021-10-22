@@ -1,7 +1,7 @@
 import time
 import typing as t
 from pathlib import Path
-from roughrider.session import Store, Session
+from http_session.meta import Store, SessionData
 from cromlech.marshallers import Marshaller, PickleMarshaller
 
 
@@ -43,7 +43,7 @@ class FileStore(Store):
             return path
         return None
 
-    def get(self, sid: str) -> Session:
+    def get(self, sid: str) -> SessionData:
         session_path = self.get_session_file(sid)
         if session_path is None:
             return self.new()

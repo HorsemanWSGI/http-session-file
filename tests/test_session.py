@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from roughrider.sessions.file import FileStore
+from http_session_file import FileStore
 from cromlech.marshallers import PickleMarshaller
 from freezegun import freeze_time
 
