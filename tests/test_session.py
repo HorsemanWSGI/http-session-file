@@ -1,5 +1,4 @@
 import os
-import time
 from datetime import datetime
 from roughrider.sessions.file import FileStore
 from cromlech.marshallers import PickleMarshaller
