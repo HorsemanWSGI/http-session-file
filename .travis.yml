@@ -1,0 +1,19 @@
+dist: trusty
+language: python
+# with next we get on container based infrastructure, this enables caching
+sudo: false
+python:
+  - 3.4
+  - 3.5
+  - 3.6
+
+cache:
+  pip: true
+
+install:
+  - pip install -U pip setuptools
+  - pip install -r requirements.txt
+  - pip install -U -e ".[test]"
+
+script:
+  - pytest src --doctest-modules
