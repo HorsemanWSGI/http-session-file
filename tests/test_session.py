@@ -14,7 +14,7 @@ def test_store_defaults(tmp_path):
     path = tmp_path / 'sessions'
     store = FileStore(path, 300)
     assert path.exists()
-    assert store.delta == 300
+    assert store.TTL == 300
     assert store.marshaller is PickleMarshaller
 
 
@@ -86,10 +86,11 @@ def test_flush(tmp_path):
         alter_file_mtime(store.get_session_file('another_test'))
 
     with freeze_time("2021-10-20 12:06:00"):
-        assert list(store) == [
-            tmp_path / 'sessions' / 'test',
-            tmp_path / 'sessions' / 'another_test',
-        ]
+        files = list(store)
+        assert len(files) == 2
+        assert tmp_path / 'sessions' / 'test' in files
+        assert tmp_path / 'sessions' / 'another_test' in files
+
         store.flush_expired_sessions()
         assert list(store) == [
             tmp_path / 'sessions' / 'another_test',

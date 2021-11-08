@@ -12,7 +12,7 @@ class FileStore(Store):
                  root: Path,
                  TTL: int,
                  marshaller: t.Type[Marshaller] = PickleMarshaller):
-        root.mkdir(parents=True, exist_ok=False)
+        root.mkdir(parents=True, exist_ok=True)
         self.root = root
         self.TTL = TTL  # timedelta in seconds.
         self.marshaller = marshaller
@@ -46,7 +46,7 @@ class FileStore(Store):
     def get(self, sid: str) -> SessionData:
         session_path = self.get_session_file(sid)
         if session_path is None:
-            return self.new()
+            return {}
         session = self.marshaller.load_from(session_path)
         return session
 
