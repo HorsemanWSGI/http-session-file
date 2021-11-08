@@ -1,2 +1,0 @@
-cromlech.marshallers == 0.1
-git+https://github.com/HorsemanWSGI/http-session.git@main#egg=http_session
