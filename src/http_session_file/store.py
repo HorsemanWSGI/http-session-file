@@ -10,11 +10,11 @@ class FileStore(Store):
     """
     def __init__(self,
                  root: Path,
-                 delta: int,
+                 TTL: int,
                  marshaller: t.Type[Marshaller] = PickleMarshaller):
         root.mkdir(parents=True, exist_ok=False)
         self.root = root
-        self.delta = delta  # timedelta in seconds.
+        self.TTL = TTL  # timedelta in seconds.
         self.marshaller = marshaller
 
     def get_session_path(self, sid) -> Path:
@@ -37,7 +37,7 @@ class FileStore(Store):
             if epoch is None:
                 epoch = time.time()
             fmod = path.stat().st_mtime
-            if (fmod + self.delta) < epoch:
+            if (fmod + self.TTL) < epoch:
                 path.unlink()  # File expired, we remove
                 return None
             return path
@@ -73,5 +73,5 @@ class FileStore(Store):
         now = time.time()
         for path in iter(self):
             fmod = path.stat().st_mtime
-            if (fmod + self.delta) < now:
+            if (fmod + self.TTL) < now:
                 path.unlink()  # File expired, we remove
